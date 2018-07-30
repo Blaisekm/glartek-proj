@@ -2,15 +2,16 @@
 import React, { Component } from "react";
 import "dhtmlx-gantt";
 import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
+// import AddNewTask from "./AddNewTask.js";
 
 export default class Gantt extends Component {
   componentDidMount() {
     //default columns definition
     gantt.config.columns = [
       { name: "text", label: "Teams", width: "*", tree: true, align: "left" },
-      { name: "start_date", label: "Start time", align: "center" },
+      // { name: "start_date", label: "Start time", align: "center" },
       { name: "duration", label: "Tasks", align: "center" },
-      { name: "add", label: "", width: 44 }
+      // { name: "add", label: "", width: 44 }
     ];
 
     gantt.attachEvent("onAfterTaskAdd", (id, task) => {
@@ -49,35 +50,59 @@ export default class Gantt extends Component {
       }
     });
 
+    // gantt.config.layout = {
+    //   css: "gantt_container",
+    //   cols: [
+    //     {
+    //       width: 400,
+    //       min_width: 300,
+
+    //       // adding horizontal scrollbar to the grid via the scrollX attribute
+    //       rows: [
+    //         {
+    //           view: "grid",
+    //           scrollX: "gridScroll",
+    //           scrollable: true,
+    //           scrollY: "scrollVer"
+    //         },
+    //         { view: "scrollbar", id: "gridScroll" }
+    //       ]
+    //     },
+    //     { resizer: true, width: 1 },
+    //     {
+    //       rows: [
+    //         { view: "timeline", scrollX: "scrollHor", scrollY: "scrollVer" },
+    //         { view: "scrollbar", id: "scrollHor" }
+    //       ]
+    //     },
+    //     { view: "scrollbar", id: "scrollVer" }
+    //   ]
+    // };
+    // // reordering tasks within the whole gantt
+    // gantt.config.order_branch_free = true;
+   
+
     gantt.config.layout = {
       css: "gantt_container",
-      cols: [
-       {
-         width:400,
-         min_width: 300,
-     
-         // adding horizontal scrollbar to the grid via the scrollX attribute
-         rows:[
-          {view: "grid", scrollX: "gridScroll", scrollable: true, scrollY: "scrollVer"}, 
-          {view: "scrollbar", id: "gridScroll"}  
-         ]
-       },
-       {resizer: true, width: 1},
-       {
-         rows:[
-          {view: "timeline", scrollX: "scrollHor", scrollY: "scrollVer"},
-          {view: "scrollbar", id: "scrollHor"}
-         ]
-       },
-       {view: "scrollbar", id: "scrollVer"}
+       rows: [
+         {
+           cols: [
+             {view: "grid",scrollX: "scrollHor", scrollY: "scrollVer"},
+            //  { html:"<div class='custom-content'>Hi</div>", 
+            //      css:"custom-content", width:100},
+             {view: "timeline", scrollX: "scrollHor", scrollY: "scrollVer"},
+             { html:"<div class='custom-content'> <button type='submit'> Create New Task</button></div>", 
+                 css:"custom-content", width:200},
+             {view: "scrollbar", id: "scrollVer"}
+           ]
+         },
+         {view: "scrollbar", scroll: "x", id: "scrollHor"}
       ]
-    };
+     }
 
     gantt.init(this.ganttContainer);
     gantt.parse(this.props.tasks);
   }
-  
-  
 
   setZoom(value) {
     switch (value) {
@@ -124,7 +149,9 @@ export default class Gantt extends Component {
           this.ganttContainer = input;
         }}
         style={{ width: "100%", height: "100%" }}
-      />
+      ></div>
+      
+      
     );
   }
 }
